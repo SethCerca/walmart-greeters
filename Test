@@ -1,0 +1,144 @@
+#include "pch.h"
+using namespace std;
+#include <iostream>
+#include <ctime>
+#include <string>
+#include <cstdlib>
+#include <stdlib.h>
+#include <cmath>
+
+
+class Game {
+	//public class makes variables accessable throughout the program
+public:
+
+	int score;			//Keeps track of user score per round
+	int highscore;		//Tracks the highscore 
+	int difficulty = 6;	//Sets the size of the board
+	int xLocation;		//Colum the mole is in
+	int yLocation;		//Row the mole is in
+	char grid[7][7];	//holds the level 3 game board
+	int size;			//Size of the game board
+
+		// The various modifier functions (getters & setters)
+	void setY(int y);
+	void setX(int x);
+	void setSize(int diff);
+	void setGrid();
+	void displayGid();
+	char getGrid(int i, int j);
+	int getDifficulty(void);
+	void setMole();
+
+	
+};
+
+void Game::setMole() {
+	grid[yLocation][xLocation] = 'O';
+}
+
+// Displays the grid on the output screen
+void Game::displayGid() {
+	int c = 0;
+	for (int i = 0; i < size; i++) {
+		for (int j = 0; j < size; j++) {
+			cout << grid[i][j];
+			c++;
+			if (c % size == 0) {
+				cout << endl;
+			}
+		}
+	}
+
+}
+
+// Return value of specific grid value 
+char Game::getGrid(int i, int j) {
+	return grid[i][j];
+}
+
+// Sets the value of size in the public class
+void Game::setSize(int diff) {
+	size = diff;
+}
+
+//Gets the difficulty from the user
+int Game::getDifficulty(void) {
+	cout << "what level difficulty do you want? (1 to 3)" << endl;
+	cin >> difficulty;
+	return difficulty;
+}
+
+// Sets the value of yLocation in the public class
+void Game::setY(int y) {
+	yLocation = y;
+}
+
+// Sets the value of xLocation in the public class
+void Game::setX(int x) {
+	xLocation = x;
+}
+
+// Populates the grid with needed values
+void Game::setGrid() 
+{
+	int i;
+	int j;
+	for (i = 0; i < size; i++) {
+		if (i % 2 == 0) {
+			for (j = 0; j < size; j++) {
+				if (j % 2 == 0) {
+					grid[i][j] = 'X';
+				}
+				else {
+					grid[i][j] = '|';
+				}
+			}
+			cout << endl;
+		}
+		else {
+			for (j = 0; j < size; j++) {
+				grid[i][j] = '-';
+			}
+			cout << endl;
+		}
+	}
+}
+
+int main()
+{
+	// Declare game object
+	Game game1;
+
+	// declare variables 
+	int diff;
+	int size;
+	int game;
+	char play = 'y';
+
+	// calls and sets the size of the board size
+	diff = game1.getDifficulty() + 1;
+	size = (diff * 2) - 1;
+	game1.setSize(size);
+	game1.setGrid();
+
+	while (play == 'y') {
+
+		//resets grid from last round
+		game1.setGrid();
+
+		//Set mole location
+		srand(time(NULL));
+		game1.setX(2 * rand() % (diff * 2));
+		game1.setY(2 * rand() % (diff * 2));
+		game1.setMole();
+
+		// display the game board
+		game1.displayGid();
+
+		// asks user to keep playing
+		cout << "do you want to keep playing?" << endl;
+		cin >> play;
+	}
+
+}	
